@@ -1,0 +1,7 @@
+* Diana text processing adventures
+
+* TODO/DONE
+
+** FRI 2 JAN 2015
+
+- git!
