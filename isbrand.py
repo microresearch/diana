@@ -2,7 +2,7 @@
 
 # TODO: 
 # - to follow structure, verse pattern of text rather than sentence
-# - pickle the isbrand and correct classification errors by hnad
+# - pickle the isbrand and correct classification errors by hand
 
 
 import random, pickle
@@ -12,6 +12,8 @@ from textclean.textclean import textclean
 #crash_raw = open("crash.txt").read()
 
 esc_chars = [".","...",']',';','%','^','&','_','{',"}","~"]
+
+esc_words = [",",".","'",":","?","'s"," ",""]
 
 def storepickle(text,where):
     out = open(where, 'wb')
@@ -36,15 +38,15 @@ def choose(listie):
 
 #crash_raw = open("/root/collect2012-3/diana/documents/paget.txt").read()
 #crash_raw = open("wounds/crashwounds").read()
-crash_raw = open("texts/isbrand").read()
+crash_raw = open("/root/diana/chapters/3_glass-crash/texts/isbrand").read()
 crash_r = textclean.clean(crash_raw)
 #sens = nltk.sent_tokenize(crash_raw)
 sens = [word.lower() 
         for word in nltk.sent_tokenize(crash_r)]
 
-
 crash = []
 for sen in sens:
+#    print sen
     crash += nltk.pos_tag(nltk.word_tokenize(sen))
     crash += ("XXXXX",)
 #print crash
@@ -76,7 +78,7 @@ for sen in sens:
 # storepickle(mm,"pickle/crash1.pickle") 
 #ttt=recallpickle("pagetsentenced.pickle")+recallpickle("customcrashsentenced.pickle")
 
-mm=recallpickle("pickle/crash1.pickle")
+mm=recallpickle("/root/diana/chapters/3_glass-crash/pickle/crash1.pickle")
 
 
 
@@ -88,27 +90,35 @@ mm=recallpickle("pickle/crash1.pickle")
 #ll.sort()
 #print ll[0]
 #print ll
+caps=1
 
 for x in range(1):
-    print x
+#    print x
     out = ""
     for word in crash:
 #        pos = word[1]
-        print word
+#        print word
         if word=="XXXXX": 
-            out+="\n"
+            out+=".\n"
+            caps=1
         else:
             newword = ""
             try:
             #            newword = choose(mm[word[1]]) # + " "
-                newword = random.choice(mm[word[1]])+" " # choose from POS key
+                newword = random.choice(mm[word[1]]) # choose from POS key
             #        print mm[word[1]]
             except:
-                newword = word[0]+" "
+                newword = word[0]
             for ch in esc_chars:
                 newword = newword.replace(ch,"")
-            out += newword
-#    print newword
+            if newword in esc_words:
+                out+= newword
+            elif caps==1:
+                caps=0
+                out+=newword.title()
+            else:
+                out += " "+ newword
+
     print out+"\n\n"
     
 # outfile = open("crashpaget002", "w")

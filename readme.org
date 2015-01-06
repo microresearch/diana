@@ -2,6 +2,20 @@
 
 * TODO/DONE
 
+porting/cleaning old diana nltk code: https://github.com/nltk/nltk/wiki/Porting-your-code-to-NLTK-3.0
+
+textclean, nodes, other changes, break up functionality
+
+DONE: test6.py and isbrand.py (also all pickles saved to speed up)
+
+
 ** FRI 2 JAN 2015
 
-- git!
+git!
+
+*** TODO:
+
+// all from diana/chapters
+- port to new NLTK/Python
+- clean up with pickling and break down into more functional segments
+- path names!
