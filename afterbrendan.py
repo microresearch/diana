@@ -18,7 +18,7 @@ def choose(listie):
         listie[0]=count
     return listie[count]
 
-crash_raw = open("texts/isbrand").read()
+crash_raw = open("/root/diana/chapters/3_glass-crash/texts/isbrand").read()
 crash_raw = textclean.clean(crash_raw)
 sens = [word.lower() 
         for word in nltk.sent_tokenize(crash_raw)]
@@ -30,7 +30,7 @@ for sen in sens:
         crash += ("XXXXX",)
 #print crash
 
-train_txt = open("texts/crash.txt").read()
+train_txt = open("/root/diana/chapters/3_glass-crash/texts/crash.txt").read()
 train_txt = textclean.clean(train_txt)
 train_sens = nltk.sent_tokenize(train_txt)
 train_txt = []

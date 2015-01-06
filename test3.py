@@ -1,7 +1,5 @@
 #TODO- learning chunks from wounds, process of recombination
 
-#### 2014/2015 - node replaced in nltk 3.0 with label()
-
 # 1-text becomes instructions (as chunks) becomes/generates text
 # 2-also as genetic algo.
 
@@ -49,43 +47,17 @@ def a(input):
     x = input[random.randint(0,len(input) - 1)]
     return x
 
+def removeNonAscii(s): return "".join(i for i in s if ord(i)<128)
+
 def reader():
-    ttt = open('/root/collect2012-3/diana/documents/paget2.txt','r')
-#    ttt = open('shortpaget','r')
-#    ttt = open('crash.txt','r')
-#    ttt = open('crashchap1','r')
-#    ttt = open('wounds/crashwounds','r')
-#    uuu=rrr.read()+ttt.read()
-    return ttt.read()
+    ttt = open('/root/diana/chapters/3_glass-crash/texts/crashchap1','r')
+
+    return removeNonAscii(ttt.read())
 
 def plaintaggedtree(text):
     sentences = nltk.sent_tokenize(text)
     sentences = [nltk.word_tokenize(sent) for sent in sentences]
-    sentences = [nltk.pos_tag(sent) for sent in sentences] 
-#    sentences = [nltk.ne_chunk(sent) for sent in sentences]
     return sentences
-
-def tokenize_text_and_tag_named_entities(text):
-    tokens = []
-    # split the source string into a list of sentences
-    # for each sentence, split it into words and tag the word with its PoS
-    # send the words to the named entity chunker
-    # for each chunk containing a Named Entity, build an nltk Tree consisting of the word and its Named Entity tag
-    # and append it to the list of tokens for the sentence
-    # for each chunk that does not contain a NE, add the word to the list of tokens for the sentence
-    for sentence in nltk.sent_tokenize(text):
-        for chunk in nltk.ne_chunk(nltk.pos_tag(nltk.word_tokenize(sentence))):
-            try:
-                chunk.label()
-            except AttributeError:
-                tokens.append(chunk[0])
-            else:
-                if chunk.label() != 'GPE':
-                    tmp_tree = nltk.Tree(chunk.label(),  [(' '.join(c[0] for c in chunk.leaves()))])
-                else:
-                    tmp_tree = nltk.Tree('LOCATION',  [(' '.join(c[0] for c in chunk.leaves()))])
-                    tokens.append(tmp_tree)
-    return tokens
 
 class doc():
   pass
@@ -118,25 +90,25 @@ def recallpickle(where):
     out.close()
     return text
 
-# text=reader()
+text=reader()
 # ttt=nltk.word_tokenize(text)
-# ttt=plaintaggedtree(text)
+ttt=plaintaggedtree(text)
 
-# patterns = [
-#     ('injur*|wound*', 'INJ'),
-#     ('crash*', 'CHR'),
-#     ('collision*', 'COL')
-#     ]
+patterns = [
+    ('injur*|wound*', 'INJ'),
+    ('crash*', 'CHR'),
+    ('collision*', 'COL')
+    ]
 
-# tag1= nltk.data.load(nltk.tag._POS_TAGGER)
-# regexp_tagger = nltk.RegexpTagger(patterns,backoff=tag1)
-# ttt=[regexp_tagger.tag(sent) for sent in ttt]
+tag1= nltk.data.load(nltk.tag._POS_TAGGER)
+regexp_tagger = nltk.RegexpTagger(patterns,backoff=tag1)
+ttt=[regexp_tagger.tag(sent) for sent in ttt]
 # #print ttt
 
 # storepickle(ttt,"pagetsentenced.pickle") 
 #ttt=recallpickle("pagetsentenced.pickle")+recallpickle("customcrashsentenced.pickle")
 
-ttt=recallpickle("/root/diana/chapters/3_glass-crash/pickle/customcrashsentenced.pickle")
+#ttt=recallpickle("customcrashsentenced.pickle")
 #ttt=recallpickle("crash_taggedwounds.pickle")
 #004 is full crash... paget_tagged2 is full paget
 
@@ -180,7 +152,6 @@ for sent in result:
     for subtree in sent.subtrees():
 #    if len(subtree) == 5:
         np=""
-#        print subtree.label()
         if subtree.label() == 'IP':
             x=' '.join(nltk.tag.untag(subtree))
             for i in x:
@@ -190,24 +161,24 @@ for sent in result:
 #print nounphrase
 sentence=""
 
-# for sent in result:
-#     for subtree in sent.subtrees():
-# #    if len(subtree) == 5:
-#         np=""
-#         if subtree.node == 'IP':
-#             x=' '.join(nltk.tag.untag(subtree))
-# #            print x+",",
-#             for words in sent:
-#                 if isinstance(words[0], tuple):
-#                     sentence+= a(nounphrase)+" "
-#                 else:
-#                     if words[0]=="," or words[0]==".":
-#                         sentence= sentence[:-1] + words[0]+" "
-#                     else:
-#                         sentence+=words[0]+" "
-#             print sentence[:-1]
-#             print
-#             sentence=""
+for sent in result:
+    for subtree in sent.subtrees():
+#    if len(subtree) == 5:
+        np=""
+        if subtree.label() == 'IP':
+            x=' '.join(nltk.tag.untag(subtree))
+#            print x+",",
+            for words in sent:
+                if isinstance(words[0], tuple):
+                    sentence+= a(nounphrase)+" "
+                else:
+                    if words[0]=="," or words[0]==".":
+                        sentence= sentence[:-1] + words[0]+" "
+                    else:
+                        sentence+=words[0]+" "
+#            print sentence[:-1]
+#            print
+            sentence=""
 #            for i in x:
 #                np += i + " "
         #                np += i
@@ -261,7 +232,6 @@ for sent in result:
 
 nounphrasei = list(set(nounphrasei))
 pastverb = list(set(pastverb))
-
 
 # g=ttt
 
@@ -382,7 +352,7 @@ for sent in ttt:
         if i[1] == "VBD":
             pastverb.append(i[0])
 pastverb = list(set(pastverb))
-#print pastverb
+
 # vbz = []
 # for i in g:
 #     if i[1] == "VBZ":
@@ -452,23 +422,12 @@ pastverb = list(set(pastverb))
 #     print x
 
 def diana():
-    x="Diana "+a(pastverb)+" "+a(nounphrasei)+" "+ a(pastverb)+" "+a(nounphrase)+" "+ a(pastverb)+" "+a(nounphraseo)+"."
-#    x="Diana "+ a(pastverb)+" "+a(nounphrasei)+" in a "+a(nounphraseo)+"."
+#    x="Diana "+ a(pastverb)+" "+a(nounphrasei)+" "+ a(pastverb)+" "+a(nounphrase)+" "+ a(pastverb)+" "+a(nounphraseo)+" "
+    x="Diana "+ a(pastverb)+" "+a(nounphrasei)+" in a "+a(nounphraseo)+"."
     print x
 
-#for x in range(2000):
-#    print a(("Diana our lady of","Diana princess of", "Diana queen of")), a(nounphrase)+"."
-
-
-# Diana our lady of
-# Diana princess of
-# Diana queen of
-
-#print nounphrasei
-
-
 #print "Diana",
-for x in range(200):
+for x in range(10):
     diana()
 
 # print "injury:"

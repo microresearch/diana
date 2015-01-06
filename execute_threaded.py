@@ -2,7 +2,7 @@
 
 import nltk, random
 
-train_txt = open("texts/wounds/crashwounds").read()
+train_txt = open("/root/diana/chapters/3_glass-crash/texts/wounds/crashwounds").read()
 train_sens = nltk.sent_tokenize(train_txt)
 train_txt = []
 for sen in train_sens:

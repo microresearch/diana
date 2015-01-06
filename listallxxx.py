@@ -10,7 +10,7 @@ def recallpickle(where):
     out.close()
     return text
 
-ttt=recallpickle("pickle/customcrashsentenced.pickle")
+ttt=recallpickle("/root/diana/chapters/3_glass-crash/pickle/customcrashsentenced.pickle")
 
 listof=[]
 

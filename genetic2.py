@@ -21,12 +21,12 @@ for sen in sens:
 	crashier += nltk.pos_tag(nltk.word_tokenize(sen))
 
 # read-in ballard section (chap14)
-crash_raw = open("texts/chap14").read() 
+crash_raw = open("/root/diana/chapters/3_glass-crash/texts/chap14").read() 
 #crash_raw = open("crash.txt").read() 
 # own section
-crash_raw += open("texts/ownshort").read() 
+crash_raw += open("/root/diana/chapters/3_glass-crash/texts/ownshort").read() 
 # diana section
-crash_raw = open("texts/shortpaget").read() 
+crash_raw = open("/root/diana/chapters/3_glass-crash/texts/shortpaget").read() 
 #crash_raw = open("death_strip1").read() 
 
 crash_raw = textclean.clean(crash_raw)

@@ -59,7 +59,7 @@ doc.headline = ['this is expected by nltk.sem.extract_rels but not used in this 
 # doc.text= tokenize_text_and_tag_named_entities(text)
 # storeandtok(doc,"test")
 
-recallpickle(doc,"test")
+recallpickle(doc,"/root/diana/chapters/3_glass-crash/test")
 
 #print(doc.text)
 
