@@ -9,6 +9,12 @@ textclean, nodes, other changes, break up functionality
 DONE: test6.py and isbrand.py (also all pickles saved to speed up)
 
 
+** TUE 6 JAN 2015
+
+- test6.py cleaned up and renamed as customgrammars.py
+- discard in discard
+- cleaned up isbrand
+
 ** FRI 2 JAN 2015
 
 git!
