@@ -15,6 +15,9 @@ esc_chars = [".","...",']',';','%','^','&','_','{',"}","~"]
 
 esc_words = [",",".","'",":","?","'s"," ",""]
 
+
+def removeNonAscii(s): return "".join(i for i in s if ord(i)<128)
+
 def storepickle(text,where):
     out = open(where, 'wb')
     pickle.dump(text, out)
@@ -38,7 +41,8 @@ def choose(listie):
 
 #crash_raw = open("/root/collect2012-3/diana/documents/paget.txt").read()
 #crash_raw = open("wounds/crashwounds").read()
-crash_raw = open("/root/diana/chapters/3_glass-crash/texts/isbrand").read()
+#crash_raw = open("/root/diana/chapters/3_glass-crash/texts/isbrand").read()
+crash_raw = open("/root/writing/dee_exc").read()
 crash_r = textclean.clean(crash_raw)
 #sens = nltk.sent_tokenize(crash_raw)
 sens = [word.lower() 
@@ -54,31 +58,31 @@ for sen in sens:
 # #train_txt = open("/root/collect2012-3/diana/documents/paget.txt").read()
 # train_txt = open("/root/collect2012-3/diana/chapters/witnesscasewget/www.casebook.org/witnesses/allwitnessascii").read()
 # #train_txt = open("shortpaget").read()
-#train_txt = open("wounds/crashwounds").read()
+train_txt = open("/root/writing/occulto_latest.org").read()
 
 # train_txt = open("texts/crash.txt").read()
-# train_txt = textclean.clean(train_txt)
-# train_sens = nltk.sent_tokenize(train_txt)
-# train_txt = []
-# for sen in train_sens:
-# 	train_txt += nltk.pos_tag(nltk.word_tokenize(sen))
+#train_txt = textclean.clean(train_txt)
+train_txt=removeNonAscii(train_txt)
+train_sens = nltk.sent_tokenize(train_txt)
+train_txt = []
+for sen in train_sens:
+    train_txt += nltk.pos_tag(nltk.word_tokenize(sen))
+mm = {}
 
-# mm = {}
-
-# for tword in train_txt:
-#     if not(tword[1] in mm):
+for tword in train_txt:
+    if not(tword[1] in mm):
 # #        mm[tword[1]] = [0]
 #  #       mm[tword[1]].append(tword[0])
-#         mm[tword[1]] = [tword[0]]
-#     else:
-#         mm[tword[1]].append(tword[0])
+        mm[tword[1]] = [tword[0]]
+    else:
+        mm[tword[1]].append(tword[0])
 
 # # pickle the tokenised - rather pickle mm
 
-# storepickle(mm,"pickle/crash1.pickle") 
+storepickle(mm,"occulto.pickle") 
 #ttt=recallpickle("pagetsentenced.pickle")+recallpickle("customcrashsentenced.pickle")
 
-mm=recallpickle("/root/diana/chapters/3_glass-crash/pickle/crash1.pickle")
+#mm=recallpickle("/root/diana/chapters/3_glass-crash/pickle/crash1.pickle")
 
 
 

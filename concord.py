@@ -23,14 +23,13 @@ def plaintaggedtree(text):
     return sentences
 
 #f = open("/root/collect2012-3/diana/documents/paget2.txt")
-f = open("/root/diana/chapters/3_glass-crash/texts/crash.txt")
+f = open("/root/diana/chapters/3_glass-crash/texts/allnvfmold")
 #f = open("crashchap1")
 crash=f.read()#+ff.read()
 crash=removeNonAscii(crash)
 tokens = nltk.word_tokenize(crash)
 text1 = nltk.Text(tokens)
-#lines=text.concordance("injuries", 140, 1000)
-
+#lines=text1.concordance("autumn", 140, 1000)
 # list of terms to re-permute
 ll={}
 
@@ -38,11 +37,19 @@ for rnge in range(21):
     ll[rnge]=[]
 
 c = nltk.ConcordanceIndex(text1.tokens, key = lambda s: s.lower())
-for offset in c.offsets('crash'):
+
+# list of all words for each position which is what we want
+
+for offset in c.offsets('autumn'):
     for rnge in range(21):
         ll[rnge]=ll[rnge]+[text1.tokens[offset+(rnge-10)]]
 
-#print ll
+# but if we want just words of concordance then:
+
+#for offset in c.offsets('autumn'):
+#    print ' '.join(text1.tokens[offset-10:offset+10])
+
+
 
 # permute/randomise our x terms
 def a(input):
@@ -61,14 +68,14 @@ for x in range(100):
             sentence+= lll +" "
 #    print sentence
     sentences+=sentence[:-1]+"."
+    print sentence[:-1]+"."
 
 #process sentences
 
 sentences=plaintaggedtree(sentences)
-#print sentences
 
-#grammar = "NP: {<JJ.*>?<VBD|N.*>?<IN|VBD>?<NN>?<N.*>}" # dt jj nn = the adjective noun 
-grammar = "NP: {<JJ|NN>?<NN><MD|R.*|WDT||V.*|JJ.*|CC|P.*|TO|DT|IN|NN.*|NN|COL|CHR>+}" 
+grammar = "NP: {<JJ.*>?<VBD|N.*>?<IN|VBD>?<NN>?<N.*>}" # dt jj nn = the adjective noun 
+#grammar = "NP: {<JJ|NN>?<NN><MD|R.*|WDT||V.*|JJ.*|CC|P.*|TO|DT|IN|NN.*|NN|COL|CHR>+}" 
 
 
 cp = nltk.RegexpParser(grammar)
@@ -108,9 +115,9 @@ for sent in result:
                     else:
                         sentence+=words[0]+" "
         if len(sentence)>100:
-            xx=sentence.find("crash")
+            xx=sentence.find("autumn")
             if xx>50:
-               print sentence[xx-50:xx+50]
+                print sentence[xx-50:xx+50]
  #               print"",
         #        print sentence[:-1]
         sentence=""
