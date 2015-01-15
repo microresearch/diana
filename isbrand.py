@@ -4,6 +4,7 @@
 # - to follow structure, verse pattern of text rather than sentence
 # - pickle the isbrand and correct classification errors by hand
 
+# - here we also print with original line
 
 import random, pickle
 import nltk
@@ -12,7 +13,6 @@ from textclean.textclean import textclean
 #crash_raw = open("crash.txt").read()
 
 esc_chars = [".","...",']',';','%','^','&','_','{',"}","~"]
-
 esc_words = [",",".","'",":","?","'s"," ",""]
 
 
@@ -80,6 +80,7 @@ for tword in train_txt:
 # # pickle the tokenised - rather pickle mm
 
 storepickle(mm,"occulto.pickle") 
+
 #ttt=recallpickle("pagetsentenced.pickle")+recallpickle("customcrashsentenced.pickle")
 
 #mm=recallpickle("/root/diana/chapters/3_glass-crash/pickle/crash1.pickle")
@@ -99,18 +100,21 @@ caps=1
 for x in range(1):
 #    print x
     out = ""
+    oldout = ""
     for word in crash:
 #        pos = word[1]
 #        print word
         if word=="XXXXX": 
-            out+=".\n"
             caps=1
+            print out+"."
+            print oldout+"."
+            out=""
+            oldout = ""
         else:
             newword = ""
             try:
             #            newword = choose(mm[word[1]]) # + " "
                 newword = random.choice(mm[word[1]]) # choose from POS key
-            #        print mm[word[1]]
             except:
                 newword = word[0]
             for ch in esc_chars:
@@ -120,10 +124,11 @@ for x in range(1):
             elif caps==1:
                 caps=0
                 out+=newword.title()
+                oldout+=word[0].title()
             else:
                 out += " "+ newword
+                oldout+=" "+ word[0]
 
-    print out+"\n\n"
     
 # outfile = open("crashpaget002", "w")
 # outfile.write(out)
