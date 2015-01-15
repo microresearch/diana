@@ -11,7 +11,7 @@ import poetry
 # easiest to suggest rhymes and choose which best fits POS, then recheck syllables,,,,
 
 esc_chars = ["/","?","[","(",")","!",".","...",']',';','%','^','&','_','{',"}","~"]
-esc_words = [",",".","'",":","?","'s"," ",""]
+esc_words = [",",".","'",":","?","'s","'"]
 
 def rhymexxx(inp, level):
      entries = nltk.corpus.cmudict.entries() ## pronunciation dict
@@ -52,37 +52,46 @@ def choose(listie):
 
 # 1.1 read in and tokenize/list of POSs for train_text/mm
 
-#crash_raw = open("/root/writing/dee_exc").read()
-# crash_raw = open("/root/diana/chapters/3_glass-crash/texts/isbrand").read()
+# crash_raw = open("/root/writing/donne").read()
+# # crash_raw = open("/root/diana/chapters/3_glass-crash/texts/isbrand").read()
 # crash_raw=removeNonAscii(crash_raw)
 # nltk_splitter = nltk.data.load('tokenizers/punkt/english.pickle')
 # nltk_tokenizer = nltk.tokenize.TreebankWordTokenizer()
 # sentences = nltk_splitter.tokenize(crash_raw)
+
+# # what we want is to SPLIT on newline!
+# # other approach remove end punkt and add . (with donne by hand!)
+
+# #for para in crash_raw.split('\n'):
+# #  sentences.extend(nltk_splitter.tokenize(para)) 
+# #print sentences
+
 # tokenized_sentences = [nltk_tokenizer.tokenize(sent) for sent in sentences]
 # pos = [nltk.pos_tag(sentence) for sentence in tokenized_sentences]
 # pos = [[(word, postag) for (word, postag) in sentence] for sentence in pos] # format?
 
 #print pos
 
-# mm = {}
-# train_txt = open("/root/writing/occulto_latest.org").read()
-# train_txt=removeNonAscii(train_txt)
-# train_sens = nltk.sent_tokenize(train_txt)
-# train_txt = []
-# for sen in train_sens:
-#     train_txt += nltk.pos_tag(nltk.word_tokenize(sen))
-# mm = {}
+mm = {}
+train_txt = open("/root/diana/chapters/3_glass-crash/texts/allnvfmold").read()
+train_txt=removeNonAscii(train_txt)
+train_sens = nltk.sent_tokenize(train_txt)
+train_txt = []
+for sen in train_sens:
+    train_txt += nltk.pos_tag(nltk.word_tokenize(sen))
+mm = {}
 
-# for tword in train_txt:
-#     if not(tword[1] in mm):
-#         mm[tword[1]] = [tword[0]]
-#     else:
-#         mm[tword[1]].append(tword[0])
+for tword in train_txt:
+    if not(tword[1] in mm):
+        mm[tword[1]] = [tword[0]]
+    else:
+        mm[tword[1]].append(tword[0])
 
-#storepickle(mm,"mm.pickle") 
-#storepickle(pos,"isbrandpos.pickle") 
-mm=recallpickle("mm.pickle") 
-pos=recallpickle("isbrandpos.pickle") 
+storepickle(mm,"mmfm.pickle") 
+#storepickle(pos,"fulldonnepos.pickle") 
+
+#mm=recallpickle("mmfm.pickle") 
+pos=recallpickle("fullcrashpos.pickle") # pos is really donne not CRASH....
 
 # rhyme scheme and syllable count first!
 
@@ -141,13 +150,12 @@ for idx,sentence in enumerate(pos):
                             if poetry.rhyme(eachone,allsentences[rhymescheme[idx]][-2]):
                                 newword=eachone # take the last
                         ## result or not? if not then just take last newword generated (as is now)
-                        ## or force this to random rhyme from dict matching POS?
+                        ## or force this to random rhyme from dict matching POS?- now is just random
                         if newword=="":
                             try:
                                 newword=random.choice(rhymexxx(allsentences[rhymescheme[idx]][-2], 2))
                             except:
                                 newword=oldword
-
             out.append(newword)
         #count syllables for out
         syl=0
@@ -155,6 +163,20 @@ for idx,sentence in enumerate(pos):
             syl+=poetry.nsyl(word)
         if syl==syllables[idx]:
             allsentences.append(out)
-            print idx, " ".join(allsentences[idx])
+#            print " ".join(allsentences[idx])
             break
-    
+
+# TODO: formatting of sentences    
+# end of lines, punctuation within
+for sentences in allsentences:
+    words=""
+    for idx,word in enumerate(sentences): 
+        for ch in esc_chars:
+            word = word.replace(ch,"")
+        if word in esc_words:
+            words+= word
+        elif idx==0: 
+            words+=word.title()
+        else:
+            words+=" "+ word
+    print words
